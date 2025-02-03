@@ -1,0 +1,185 @@
+<div class="container">
+    <div class="header">
+        <h1>Board</h1>
+        <div>
+            <mat-form-field class="example-form-field">
+                <input matInput type="text" placeholder="Find task" (input)="filterTasks($event)">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            
+            
+            <button (click)="openAddTaskDialog()">Add task <mat-icon matSuffix>add</mat-icon></button>
+        </div>
+    </div>
+    <div class="board-container">
+        <div class="board-elements" cdkDropList #todoList="cdkDropList" [cdkDropListData]="todo"
+            [cdkDropListConnectedTo]="[progressList, feedbackList, doneList]" (cdkDropListDropped)="drop($event)"
+            (cdkDropListEntered)="onEnter($event, 'todoList')" (cdkDropListExited)="onExit($event, 'todoList')"
+            [class.drop-highlight]="activeContainers['todoList']">
+            <div class="board-header">
+                <h2 class="board-title">To do</h2>
+                <mat-icon class="material-symbols-outlined help" fontIcon="add_box"></mat-icon>
+            </div>
+            @for(task of todo; track task; let i = $index) {
+            <div class="board-element" cdkDrag (click)="openEditDialog(task.id)">
+                <span class="element-category"
+                    [ngClass]="task.category === 'User Story' ? 'user-story' : 'technical-task'">{{task.category}}</span>
+                <div class="element-content">
+                    <h2 class="element-title">{{task.title}}</h2>
+                    <p class="element-description">{{task.description}}</p>
+                </div>
+                <div class="element-progress-bar">
+                    @if(task.total_subtasks !== 0) {
+                    <mat-progress-bar class="bar" mode="determinate"
+                        [value]="task.done_subtasks / task.total_subtasks * 100"></mat-progress-bar> <span
+                        class="element-subtasks">{{task.done_subtasks}}/{{task.total_subtasks}} Subtasks</span>
+                    }
+                </div>
+                <div class="assigns-and-prio">
+                    <div class="assign-to">
+                        @for(contact of task.contacts; track contact) {
+                            <span [ngStyle]="{'background': getContactColor(contact)}">{{getInitials(getContactName(contact))}}</span>
+                        }
+                    </div>
+                    <div class="element-prio">
+                        @if(task.prio == 'medium') {
+                        <mat-icon class="material-symbols-outlined medium" fontIcon="equal"></mat-icon>
+                        } @else if(task.prio == 'low') {
+                        <mat-icon class="material-symbols-outlined low" fontIcon="double_arrow"></mat-icon>
+                        } @else {
+                        <mat-icon class="material-symbols-outlined urgent" fontIcon="double_arrow"></mat-icon>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        <div class="board-elements" cdkDropList #progressList="cdkDropList" [cdkDropListData]="in_progress"
+            [cdkDropListConnectedTo]="[feedbackList, todoList, doneList]" (cdkDropListDropped)="drop($event)"
+            (cdkDropListEntered)="onEnter($event, 'progressList')" (cdkDropListExited)="onExit($event, 'progressList')"
+            [class.drop-highlight]="activeContainers['progressList']">
+            <div class="board-header">
+                <h2 class="board-title">In progress</h2>
+                <mat-icon class="material-symbols-outlined help" fontIcon="add_box"></mat-icon>
+            </div>
+            @for(task of in_progress; track task; let i = $index) {
+            <div class="board-element" cdkDrag (click)="openEditDialog(task.id)">
+                <span class="element-category"
+                    [ngClass]="task.category === 'User Story' ? 'user-story' : 'technical-task'">{{task.category}}</span>
+                <div class="element-content">
+                    <h2 class="element-title">{{task.title}}</h2>
+                    <p class="element-description">{{task.description}}</p>
+                </div>
+                <div class="element-progress-bar">
+                    @if(task.total_subtasks !== 0) {
+                    <mat-progress-bar class="bar" mode="determinate"
+                        [value]="task.done_subtasks / task.total_subtasks * 100"></mat-progress-bar> <span
+                        class="element-subtasks">{{task.done_subtasks}}/{{task.total_subtasks}} Subtasks</span>
+                    }
+                </div>
+                <div class="assigns-and-prio">
+                    <div class="assign-to">
+                        @for(contact of task.contacts; track contact) {
+                            <span [ngStyle]="{'background': getContactColor(contact)}">{{getInitials(getContactName(contact))}}</span>
+                        }
+                    </div>
+                    <div class="element-prio">
+                        @if(task.prio == 'medium') {
+                        <mat-icon class="material-symbols-outlined medium" fontIcon="equal"></mat-icon>
+                        } @else if(task.prio == 'low') {
+                        <mat-icon class="material-symbols-outlined low" fontIcon="double_arrow"></mat-icon>
+                        } @else {
+                        <mat-icon class="material-symbols-outlined urgent" fontIcon="double_arrow"></mat-icon>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+        <div class="board-elements" cdkDropList #feedbackList="cdkDropList" [cdkDropListData]="feedback"
+            [cdkDropListConnectedTo]="[todoList, progressList, doneList]" (cdkDropListDropped)="drop($event)"
+            (cdkDropListEntered)="onEnter($event, 'feedbackList')" (cdkDropListExited)="onExit($event, 'feedbackList')"
+            [class.drop-highlight]="activeContainers['feedbackList']">
+            <div class="board-header">
+                <h2 class="board-title">Await feedback</h2>
+                <mat-icon class="material-symbols-outlined help" fontIcon="add_box"></mat-icon>
+            </div>
+            @for(task of feedback; track task; let i = $index) {
+            <div class="board-element" cdkDrag (click)="openEditDialog(task.id)">
+                <span class="element-category"
+                    [ngClass]="task.category === 'User Story' ? 'user-story' : 'technical-task'">{{task.category}}</span>
+                <div class="element-content">
+                    <h2 class="element-title">{{task.title}}</h2>
+                    <p class="element-description">{{task.description}}</p>
+                </div>
+                <div class="element-progress-bar">
+                    @if(task.total_subtasks !== 0) {
+                    <mat-progress-bar class="bar" mode="determinate"
+                        [value]="task.done_subtasks / task.total_subtasks * 100"></mat-progress-bar> <span
+                        class="element-subtasks">{{task.done_subtasks}}/{{task.total_subtasks}} Subtasks</span>
+                    }
+                </div>
+                <div class="assigns-and-prio">
+                    <div class="assign-to">
+                        @for(contact of task.contacts; track contact) {
+                            <span [ngStyle]="{'background': getContactColor(contact)}">{{getInitials(getContactName(contact))}}</span>
+                        }
+                    </div>
+                    <div class="element-prio">
+                        @if(task.prio == 'medium') {
+                        <mat-icon class="material-symbols-outlined medium" fontIcon="equal"></mat-icon>
+                        } @else if(task.prio == 'low') {
+                        <mat-icon class="material-symbols-outlined low" fontIcon="double_arrow"></mat-icon>
+                        } @else {
+                        <mat-icon class="material-symbols-outlined urgent" fontIcon="double_arrow"></mat-icon>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        <div class="board-elements" cdkDropList #doneList="cdkDropList" [cdkDropListData]="done"
+            [cdkDropListConnectedTo]="[feedbackList, todoList, progressList]" (cdkDropListDropped)="drop($event)"
+            (cdkDropListEntered)="onEnter($event, 'doneList')" (cdkDropListExited)="onExit($event, 'doneList')"
+            [class.drop-highlight]="activeContainers['doneList']">
+            <div class="board-header">
+                <h2 class="board-title">Done</h2>
+                <mat-icon class="material-symbols-outlined help" fontIcon="add_box"></mat-icon>
+            </div>
+            @for(task of done; track task; let i = $index) {
+            <div class="board-element" cdkDrag (click)="openEditDialog(task.id)">
+                <span class="element-category"
+                    [ngClass]="task.category === 'User Story' ? 'user-story' : 'technical-task'">{{task.category}}</span>
+                <div class="element-content">
+                    <h2 class="element-title">{{task.title}}</h2>
+                    <p class="element-description">{{task.description}}</p>
+                </div>
+                <div class="element-progress-bar">
+                    @if(task.total_subtasks !== 0) {
+                    <mat-progress-bar class="bar" mode="determinate"
+                        [value]="task.done_subtasks / task.total_subtasks * 100"></mat-progress-bar> <span
+                        class="element-subtasks">{{task.done_subtasks}}/{{task.total_subtasks}} Subtasks</span>
+                    }
+                </div>
+                <div class="assigns-and-prio">
+                    <div class="assign-to">
+                        @for(contact of task.contacts; track contact) {
+                            <span [ngStyle]="{'background': getContactColor(contact)}">{{getInitials(getContactName(contact))}}</span>
+                        }
+                    </div>
+                    <div class="element-prio">
+                        @if(task.prio == 'medium') {
+                        <mat-icon class="material-symbols-outlined medium" fontIcon="equal"></mat-icon>
+                        } @else if(task.prio == 'low') {
+                        <mat-icon class="material-symbols-outlined low" fontIcon="double_arrow"></mat-icon>
+                        } @else {
+                        <mat-icon class="material-symbols-outlined urgent" fontIcon="double_arrow"></mat-icon>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

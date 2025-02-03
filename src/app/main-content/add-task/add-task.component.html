@@ -1,0 +1,102 @@
+<div class="container">
+    <h1>Add Task</h1>
+    <form (ngSubmit)="submitTask()">
+        <div class="form-container">
+            <div class="form-element-container">
+                <div class="form-elements">
+                    <mat-label>Title<span style="color: red;">*</span></mat-label>
+                    <mat-form-field>
+                        <input matInput placeholder="Enter a title" [(ngModel)]="task.title" name="title" required>
+                    </mat-form-field>
+                </div>
+                <div class="form-elements">
+                    <mat-label>Description<span style="color: red;">*</span></mat-label>
+                    <mat-form-field>
+                        <textarea class="description" matInput placeholder="Enter a description" [(ngModel)]="task.description" name="description" required></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="form-elements">
+                    <mat-label>Assigned to</mat-label>
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="selectedContacts" name="contacts" multiple placeholder="Select contacts to assign">
+                            <mat-select-trigger>Select contacts to assign</mat-select-trigger>
+                            @for(contact of contacts; track contact) {
+                             <mat-option [value]="contact.id">
+                                {{ contact.name }}
+                            </mat-option>   
+                            }
+                            
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="assign-selected">
+                        @for (contactId of selectedContacts; track contactId) {
+                            <div class="assign-person" [ngStyle]="{'background': getContactColor(contactId)}">
+                                {{ getInitials(getContactName(contactId)) }}
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="form-subline"></div>
+            <div class="form-element-container">
+                <div class="form-elements">
+                    <mat-label>Due date<span style="color: red;">*</span></mat-label>
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="task.due_date" name="due_date" placeholder="DD.MM.YYYY" required>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="form-elements">
+                    <mat-label>Prio</mat-label>
+                    <mat-button-toggle-group class="group" [(ngModel)]="task.prio" name="prio">
+                        <mat-button-toggle class="button button-urgent" value="urgent">Urgent <mat-icon
+                                class="material-symbols-outlined"
+                                fontIcon="double_arrow"></mat-icon></mat-button-toggle>
+                        <mat-button-toggle checked class="button button-medium" value="medium">Medium <mat-icon
+                                class="material-symbols-outlined" fontIcon="equal"></mat-icon></mat-button-toggle>
+                        <mat-button-toggle class="button button-low" value="low">Low <mat-icon
+                                class="material-symbols-outlined"
+                                fontIcon="double_arrow"></mat-icon></mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div class="form-elements">
+                    <mat-label>Category<span style="color: red;">*</span></mat-label>
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="task.category" name="type" required>
+                            <mat-option value="Technical Task">Technical Task</mat-option>
+                            <mat-option value="User Story">User Story</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="form-elements">
+                    <mat-label>Subtasks</mat-label>
+                    <mat-form-field>
+                        <input matInput placeholder="Add new subtask" [(ngModel)]="test" name="test">
+                        @if (test.trim() !== '') {
+                            <div class="subtask-icons">
+                                <mat-icon matSuffix (click)="test = ''">close</mat-icon>
+                                <mat-icon matSuffix (click)="addSubtask()">check</mat-icon>
+                            </div>
+                        }
+                    </mat-form-field>
+                    <div class="task-container">
+                        @for (task of subtasks; track task; let i = $index) {
+                            <div class="task-element">
+                                {{ task }} 
+                                <mat-icon matSuffix (click)="removeSubtask(i)">close</mat-icon>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <div><span style="color: red;">*</span> This field is required</div>
+            <div class="button-group">
+                <button type="reset" class="clear-button">Clear</button>
+                <button type="submit" class="create-button">Create Task</button>
+            </div>
+        </div>
+    </form>
+</div>

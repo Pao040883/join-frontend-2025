@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="contact-list-container">
+        <button>
+            Add new contact
+            <mat-icon>person_add</mat-icon>
+        </button>
+
+        @for (group of groupContactsByLastName(); track group.letter) {
+        <h3>{{ group.letter }}</h3>
+        @for (contact of group.contacts; track contact.name) {
+        <div class="contact-item" (click)="selectContact(contact)">
+            <div class="avatar" [ngStyle]="{'background': getContactColor(contact.id)}">{{ getInitials(contact.name) }}
+            </div>
+            <div class="details">
+                <span>{{ contact.name }}</span>
+                <span class="email">{{ contact.email }}</span>
+            </div>
+        </div>
+        }
+        }
+    </div>
+    <div class="contact-details-container">
+        <div class="contact-header">
+            <h1>Contacts</h1>
+            <span class="subline">|</span>
+            <span>Better with a team</span>
+        </div>
+        @if (selectedContact) {
+        <div class="contact-detail-header">
+            <div class="avatar-large" [ngStyle]="{'background': getContactColor(selectedContact.id)}">{{
+                getInitials(selectedContact.name) }}</div>
+            <div class="actions">
+                <h2>{{ selectedContact.name }}</h2>
+                <div class="buttons">
+                    <button>Edit ✏️</button>
+                    <button>Delete 🗑️</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="informations">
+            <h3>Contact Information</h3>
+            <p><strong>Email:</strong> <a [href]="'mailto:' + selectedContact.email">{{ selectedContact.email }}</a></p>
+            <p><strong>Phone:</strong> {{ selectedContact.phone || 'Not provided' }}</p>
+        </div>
+        }
+    </div>
+</div>

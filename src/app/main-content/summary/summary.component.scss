@@ -1,0 +1,409 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1920px;
+    height: 100%;
+    gap: 16px;
+    padding-left: 96px;
+    padding-top: 96px;
+    padding-bottom: 48px;
+
+    .headline {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+
+        h1 {
+            font-size: 61px;
+            font-weight: 700;
+            line-height: 73.2px;
+            text-align: left;
+        }
+
+        .subline {
+            width: 0px;
+            height: 59px;
+            border: 3px solid #29ABE2;
+        }
+
+        h2 {
+            font-size: 27px;
+            font-weight: 400;
+            line-height: 32.4px;
+            text-align: left;
+        }
+    }
+
+    .content {
+        display: flex;
+
+        .tile-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            width: 50%;
+
+            .tiles1 {
+                display: flex;
+                gap: 32px;
+
+                .tile {
+                    display: flex;
+                    background: #FFFFFF;
+                    border-radius: 30px;
+                    color: #000000;
+                    box-shadow: 0px 0px 4px 0px #0000001A;
+                    cursor: pointer;
+                    text-decoration: none;
+
+                    &:hover {
+                        transform: scale(1.02);
+                        background-color: #2A3647;
+                        color: #fff;
+
+                        mat-icon {
+                            background: #fff !important;
+                            color: #2A3647 !important;
+                            font-weight: 700;
+                        }
+                    }
+                }
+
+                .todo {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 264px;
+                    height: 168px;
+                    padding: 38px 19px;
+
+                    .tile-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+
+                        mat-icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 69px;
+                            height: 69px;
+                            font-size: 32px;
+                            border-radius: 50%;
+                            background: #2A3647;
+                            color: #fff;
+                        }
+                    }
+
+                    .counts {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+
+                        .quantity {
+                            font-size: 64px;
+                            font-weight: 600;
+                            line-height: 76.8px;
+                            text-align: center;
+                        }
+
+                        .tile-name {
+                            font-family: Inter;
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                        }
+                    }
+                }
+
+                .done {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 264px;
+                    height: 168px;
+                    padding: 38px 19px;
+
+                    .tile-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+
+                        mat-icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 69px;
+                            height: 69px;
+                            font-size: 40px;
+                            border-radius: 50%;
+                            background: #2A3647;
+                            color: #fff;
+                        }
+                    }
+
+                    .counts {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+
+                        .quantity {
+                            font-size: 64px;
+                            font-weight: 600;
+                            line-height: 76.8px;
+                            text-align: center;
+                        }
+
+                        .tile-name {
+                            font-family: Inter;
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                        }
+                    }
+                }
+            }
+
+            .tiles2 {
+                display: flex;
+                gap: 32px;
+
+                .tile {
+                    display: flex;
+                    width: 560px;
+                    height: 168px;
+                    gap: 16px;
+                    border-radius: 30px;
+                    background: #FFFFFF;
+                    box-shadow: 0px 0px 4px 0px #0000001A;
+                    align-items: center;
+                    cursor: pointer;
+
+                    &:hover {
+                        transform: scale(1.02);
+                        background-color: #2A3647;
+                        color: #fff;
+
+                        mat-icon {
+                            font-weight: 700;
+                        }
+                    }
+                }
+
+                .urgent {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 38px 19px;
+                    width: 50%;
+                    height: 168px;
+
+                    .tile-icon {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+
+                        mat-icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 69px;
+                            height: 69px;
+                            font-size: 40px;
+                            border-radius: 50%;
+                            background: red;
+                            color: #fff;
+                            transform: rotate(-90deg);
+                        }
+                    }
+
+                    .counts {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+
+                        .quantity {
+                            font-size: 64px;
+                            font-weight: 600;
+                            line-height: 76.8px;
+                            text-align: center;
+                        }
+
+                        .tile-name {
+                            font-family: Inter;
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                        }
+                    }
+                }
+
+                .subline-urgent {
+                    height: 102.02px;
+                    border: 2px solid #D1D1D1;
+                }
+
+                .deadline {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    padding: 38px 19px;
+                    width: 50%;
+                    height: 168px;
+                    gap: 13px;
+                    padding-left: 40px;
+
+                    .deadline-date {
+                        font-size: 21px;
+                        font-weight: 700;
+                        line-height: 25.2px;
+                        text-align: left;
+                    }
+
+                    .deadline-text {
+                        font-size: 16px;
+                        font-weight: 400;
+                        line-height: 19.2px;
+                        text-align: left;
+                    }
+                }
+
+            }
+
+            .tiles3 {
+                display: flex;
+                gap: 32px;
+                width: 560px;
+                height: 170px;
+                justify-content: space-between;
+
+                .tile {
+                    display: flex;
+                    background: #FFFFFF;
+                    border-radius: 30px;
+                    color: #000000;
+                    box-shadow: 0px 0px 4px 0px #0000001A;
+                    cursor: pointer;
+                    text-decoration: none;
+
+                    &:hover {
+                        transform: scale(1.02);
+                        background-color: #2A3647;
+                        color: #fff;
+                    }
+                }
+
+                .sum {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 168px;
+                    height: 168px;
+                    padding: 38px 19px;
+
+                    .counts {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+
+                        .quantity {
+                            font-size: 64px;
+                            font-weight: 600;
+                            line-height: 76.8px;
+                            text-align: center;
+                        }
+
+                        .tile-name {
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .progress {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 168px;
+                    height: 168px;
+                    padding: 38px 19px;
+
+                    .counts {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+
+                        .quantity {
+                            font-size: 64px;
+                            font-weight: 600;
+                            line-height: 76.8px;
+                            text-align: center;
+                        }
+
+                        .tile-name {
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .await {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 168px;
+                    height: 168px;
+                    padding: 38px 19px;
+
+                    .counts {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+
+                        .quantity {
+                            font-size: 64px;
+                            font-weight: 600;
+                            line-height: 76.8px;
+                            text-align: center;
+                        }
+
+                        .tile-name {
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .greet {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        font-size: 47px;
+        font-weight: 500;
+        line-height: 56.4px;
+        text-align: left;
+    }
+}

@@ -1,0 +1,191 @@
+<div class="container">
+    <mat-dialog-content>
+        <form>
+            <div class="form-container">
+                <div class="form-element-container">
+                    <div class="dialog-header">
+                        <div class="close-button">
+                            <mat-icon class="material-symbols-outlined" fontIcon="close"
+                                (click)="onNoClick()"></mat-icon>
+                        </div>
+                        <div class="type-and-category">
+                            <mat-form-field class="category"
+                                [ngClass]="data.category === 'User Story' ? 'user-story' : 'technical-task'">
+                                <mat-select [(ngModel)]="data.category" name="category" required
+                                    [disabled]="!isEditing">
+                                    <mat-option value="Technical Task">Technical Task</mat-option>
+                                    <mat-option value="User Story">User Story</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="type">
+                                <mat-select [(ngModel)]="data.type" name="type" required
+                                    (selectionChange)="changeType($event.value)">
+                                    <mat-option value="todo" [disabled]="data.type=='todo'">Todo</mat-option>
+                                    <mat-option value="progress" [disabled]="data.type=='progress'">In
+                                        progress</mat-option>
+                                    <mat-option value="feedback" [disabled]="data.type=='feedback'">Await
+                                        feedback</mat-option>
+                                    <mat-option value="done" [disabled]="data.type=='done'">Done</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-elements">
+                        @if(isEditing) {
+                        <mat-label>Title<span style="color: red;">*</span></mat-label>
+                        }
+                        <mat-form-field class="title">
+                            <input matInput placeholder="Enter a title" [(ngModel)]="data.title" name="title" required
+                                [disabled]="!isEditing" />
+                        </mat-form-field>
+                    </div>
+                    <div class="form-elements">
+                        @if(isEditing) {
+                        <mat-label>Description<span style="color: red;">*</span></mat-label>
+                        }
+                        <mat-form-field class="description-field">
+                            <textarea class="description" matInput placeholder="Enter a description"
+                                [(ngModel)]="data.description" name="description" required
+                                [disabled]="!isEditing"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-elements">
+                        @if(isEditing) {
+                        <mat-label>Due date<span style="color: red;">*</span></mat-label>
+
+                        <mat-form-field class="due-date-field">
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="data.due_date" name="due_date"
+                                placeholder="DD.MM.YYYY" required [disabled]="!isEditing">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"
+                                [disabled]="!isEditing"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        } @else {
+                        <div class="due-date-container">
+                            <span>Due date:</span>
+                            <span>{{formatDate(data.due_date)}}</span>
+                        </div>
+                        }
+                    </div>
+                    <div class="form-elements">
+                        @if(isEditing) {
+                        <mat-label>Prio</mat-label>
+                        <mat-button-toggle-group class="group" [(ngModel)]="data.prio" name="prio">
+                            <mat-button-toggle class="button button-urgent" value="urgent">Urgent <mat-icon
+                                    class="material-symbols-outlined"
+                                    fontIcon="double_arrow"></mat-icon></mat-button-toggle>
+                            <mat-button-toggle checked class="button button-medium" value="medium">Medium <mat-icon
+                                    class="material-symbols-outlined" fontIcon="equal"></mat-icon></mat-button-toggle>
+                            <mat-button-toggle class="button button-low" value="low">Low <mat-icon
+                                    class="material-symbols-outlined"
+                                    fontIcon="double_arrow"></mat-icon></mat-button-toggle>
+                        </mat-button-toggle-group>
+                        } @else {
+                        <div class="prio-container">
+                            <span>Priority:</span>
+                            <span>{{data.prio}}
+                                @if(data.prio === 'low') {
+                                <mat-icon class="material-symbols-outlined low" fontIcon="double_arrow"></mat-icon>
+                                }
+                                @if(data.prio === 'medium') {
+                                <mat-icon class="material-symbols-outlined medium" fontIcon="equal"></mat-icon>
+                                }
+                                @if(data.prio === 'urgent') {
+                                <mat-icon class="material-symbols-outlined urgent" fontIcon="double_arrow"></mat-icon>
+                                }
+                            </span>
+                        </div>
+                        }
+                    </div>
+                    <div class="form-elements">
+                        @if(isEditing) {
+
+                        <mat-label class="pt24">Assigned to</mat-label>
+                        <mat-form-field>
+                            <mat-select value="Select contacts to assign" [(ngModel)]="selectedContacts" name="contacts" multiple placeholder="Select contacts to assign">
+                                <mat-select-trigger>Select contacts to assign</mat-select-trigger>
+                                @for(contact of contacts; track contact) {
+                                <mat-option [value]="contact.id">
+                                    {{contact.name }}
+                                </mat-option>
+                                }
+
+                            </mat-select>
+                        </mat-form-field>
+                        <div class="assign-selected">
+                            @for (contactId of selectedContacts; track contactId) {
+                            <div class="assign-person" [ngStyle]="{'background': getContactColor(contactId)}">
+                                {{ getInitials(getContactName(contactId)) }}
+                            </div>
+                            }
+                        </div>
+                        } @else {
+                        <div class="assign-to-container">
+                            <span>Assign to</span>
+                            @for (contactId of data.contacts; track contactId) {
+                            <div class="assign-person">
+                                <span class="initials" [ngStyle]="{'background': getContactColor(contactId)}">{{
+                                    getInitials(getContactName(contactId)) }}</span> {{ getContactName(contactId) }}
+                            </div>
+                            }
+                        </div>
+                        }
+                    </div>
+                    <div class="form-elements">
+                        @if(isEditing) {
+
+                        <mat-label class="pt24">Subtasks</mat-label>
+                        <mat-form-field>
+                            <input matInput placeholder="Add new subtask" [(ngModel)]="test" name="test">
+                            @if (test.trim() !== '') {
+                            <div class="subtask-icons">
+                                <mat-icon matSuffix (click)="test = ''">close</mat-icon>
+                                <mat-icon matSuffix (click)="addSubtask()">check</mat-icon>
+                            </div>
+                            }
+                        </mat-form-field>
+                        <div class="task-container">
+                            @for (task of subtasks; track task; let i = $index) {
+                            <div class="task-element">
+                                {{ task.title }}
+                                <mat-icon matSuffix (click)="deleteSubtaskTask(i)">close</mat-icon>
+                            </div>
+                            }
+                            @for (task of newSubtasks; track task; let i = $index) {
+                                <div class="task-element">
+                                    {{ task }}
+                                    <mat-icon matSuffix (click)="removeSubtask(i)">close</mat-icon>
+                                </div>
+                                }
+                        </div>
+                        } @else {
+                        @if(subtasks.length != 0) {
+                        <div class="subtasks-container">
+                            <span>Subtasks</span>
+                            @for (task of subtasks; track task; let i = $index) {
+                            <div class="task-element">
+                                <!-- {{ task.title }}
+                                <mat-icon matSuffix>close</mat-icon> -->
+                                <mat-checkbox class="example-margin" [checked]="task.status == 'done'" (click)="updateStatus(task.id, task.status)">{{ task.title }}</mat-checkbox>
+                            </div>
+                            }
+                        </div>
+                        }
+                        }
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        @if(!isEditing) {
+        <button mat-button (click)="deleteTask()"><mat-icon class="material-symbols-outlined help"
+                fontIcon="delete"></mat-icon> Delete</button>
+        <button mat-button (click)="toggleEditing()"><mat-icon class="material-symbols-outlined help"
+                fontIcon="edit"></mat-icon> Edit</button>
+        } @else {
+        <button mat-button (click)="saveChanges()"><mat-icon class="material-symbols-outlined help"
+                fontIcon="save"></mat-icon> Ok</button>
+        }
+    </mat-dialog-actions>
+</div>

@@ -1,0 +1,237 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 48px;
+    padding: 16px;
+
+    h1 {
+        font-size: 61px;
+        line-height: 63px;
+    }
+
+    form {
+        .form-container {
+            display: flex;
+            gap: 32px;
+
+            .form-element-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .form-elements {
+                    display: flex;
+                    flex-direction: column;
+                    width: 440px;
+                    gap: 4px;
+
+                    mat-label {
+                        font-size: 20px;
+                        font-weight: 400;
+                        line-height: 24px;
+                        text-align: left;
+                        color: #2a3647;
+                    }
+
+                    .description {
+                        resize: none;
+                        height: 120px;
+                    }
+
+                    .assign-selected {
+                        display: flex;
+
+                        .assign-person {
+                            background-color: #ffa801;
+                            color: #fff;
+                            height: 32px;
+                            width: 32px;
+                            border-radius: 50%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+
+                    .subtask-icons {
+                        display: flex;
+                        gap: 4px;
+                    }
+
+                    .task-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        height: 100px;
+                        overflow-y: scroll;
+                        scrollbar-width: none;
+
+                        &::-webkit-scrollbar {
+                            display: none;
+                        }
+
+                        .task-element {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 0 8px;
+                        }
+                    }
+
+                    .group {
+                        gap: 24px;
+                        border: none;
+
+                        .button {
+                            width: 136px;
+                            border-radius: 10px;
+                            padding: 4px 0;
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 24px;
+                            text-align: left;
+                        }
+
+                        .button-urgent {
+                            mat-icon {
+                                transform: rotate(-90deg);
+                                color: #ff3d00;
+                            }
+                        }
+
+                        .button-medium {
+                            mat-icon {
+                                color: #ffa801;
+                            }
+                        }
+
+                        .button-low {
+                            mat-icon {
+                                color: #7ae229;
+                                transform: rotate(90deg);
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            .form-subline {
+                width: 0px;
+                height: 424px;
+                border: 1px solid #d1d1d1;
+            }
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .button-group {
+                display: flex;
+                gap: 16px;
+                padding-right: 32px;
+
+                .clear-button {
+                    width: 110px;
+                    height: 56px;
+                    padding: 16px;
+                    gap: 4px;
+                    border-radius: 10px;
+                    border: 1px solid #2a3647;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 20px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    text-align: left;
+                    color: #2a3647;
+                    cursor: pointer;
+
+                    &:hover {
+                        transform: scale(1.02);
+                    }
+                }
+
+                .create-button {
+                    width: 183px;
+                    height: 56px;
+                    padding: 16px;
+                    gap: 4px;
+                    border-radius: 10px;
+                    background: #2a3647;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 21px;
+                    font-weight: 700;
+                    line-height: 25.2px;
+                    color: #ffffff;
+                    cursor: pointer;
+
+                    &:hover {
+                        transform: scale(1.02);
+                    }
+                }
+            }
+        }
+    }
+}
+
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #fff !important;
+    border-radius: 10px;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay {
+    opacity: 0 !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper:hover .mat-mdc-form-field-focus-overlay {
+    opacity: 0 !important;
+}
+
+::ng-deep .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
+    display: none;
+    /* Entfernt den standardmäßigen Haken */
+}
+
+::ng-deep .mat-button-toggle .mat-pseudo-checkbox {
+    display: none;
+    /* Entfernt den standardmäßigen Haken */
+}
+
+::ng-deep .mat-button-toggle-appearance-standard.mat-button-toggle-checked.button-urgent {
+    background-color: #ff3d00 !important;
+    color: #fff !important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard.mat-button-toggle-checked.button-medium {
+    background-color: #ffa801 !important;
+    color: #fff !important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard.mat-button-toggle-checked.button-low {
+    background-color: #7ae229 !important;
+    color: #fff !important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard.mat-button-toggle-checked.button-urgent mat-icon {
+    color: #fff !important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard.mat-button-toggle-checked.button-medium mat-icon {
+    color: #fff !important;
+}
+
+::ng-deep .mat-button-toggle-appearance-standard.mat-button-toggle-checked.button-low mat-icon {
+    color: #fff !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+    display: flex;
+    padding-right: 4px;
+}
