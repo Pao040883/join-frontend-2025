@@ -43,11 +43,12 @@
             display: flex;
             flex-direction: column;
             gap: 32px;
-            width: 50%;
+            width: 560px;
 
             .tiles1 {
                 display: flex;
                 gap: 32px;
+                width: 560px;
 
                 .tile {
                     display: flex;
@@ -175,6 +176,7 @@
             .tiles2 {
                 display: flex;
                 gap: 32px;
+                width: 560px;
 
                 .tile {
                     display: flex;
@@ -405,6 +407,7 @@
         font-weight: 500;
         line-height: 56.4px;
         text-align: left;
+        padding-left: 48px;
     }
 }
 
@@ -453,8 +456,7 @@
                 .tiles1 {
                     gap: 16px;
                     padding: 0 24px;
-
-                    .tile {}
+                    width: 100%;
 
                     .todo {
                         width: 50%;
@@ -516,6 +518,7 @@
                 .tiles2 {
                     gap: 16px;
                     padding: 0 24px;
+                    width: 100%;
 
                     .tile {
                         display: flex;
@@ -653,6 +656,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                padding-left: 0;
             }
         }
     }

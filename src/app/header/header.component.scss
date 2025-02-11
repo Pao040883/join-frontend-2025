@@ -42,6 +42,39 @@
             border-radius: 50%;
             border: 3px solid #2A3647;
             cursor: pointer;
+            position: relative;
+
+            .menu {
+                position: absolute;
+                top: 55px;
+                width: 150px;
+                height: 204px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                row-gap: 27px;
+                border-radius: 20px 0px 20px 20px;
+                background: #2A3647;
+                box-shadow: 0px 0px 4px 0px #0000001A;
+                right: 16px;
+                padding-left: 10px;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 19.2px;
+                text-align: left;
+                color: #CDCDCD !important;
+                z-index: 999;
+
+                p {
+                    &:hover {
+                        background-color: #365787;
+                    }
+                }
+
+                .mobile-help {
+                    display: none
+                }
+            }
         }
     }
 }
@@ -49,6 +82,20 @@
 @media (max-width: 960px) {
     .container {
         padding: 20px 40px 20px 40px;
+
+        .user-container {
+            .help {
+                display: none;
+            }
+
+            .user{
+                .menu {
+                    .mobile-help {
+                        display: block;
+                    }
+                }
+            }
+        }
 
         .mobile-logo {
             display: block;

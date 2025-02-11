@@ -15,6 +15,7 @@ export class HeaderComponent {
   loggedUser = localStorage.getItem('token');
   first_name = localStorage.getItem('first_name');
   last_name = localStorage.getItem('last_name');
+  menuOpen = false;
 
   logout() {
     localStorage.removeItem('token');
@@ -33,6 +34,10 @@ export class HeaderComponent {
       .map(word => word.charAt(0))   // Erster Buchstabe jedes Wortes
       .join('')
       .toUpperCase();
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 
 }

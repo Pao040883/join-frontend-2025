@@ -62,7 +62,7 @@ export class SummaryComponent implements OnInit {
       } else {
         console.error('Kein Token verfügbar, Dashboard wird nicht geladen.');
       }
-    }, 300); // Kleine Verzögerung, um sicherzustellen, dass der Token gesetzt ist.
+    }, 100); // Kleine Verzögerung, um sicherzustellen, dass der Token gesetzt ist.
   
     if (this.isMobileView) {
       setTimeout(() => {

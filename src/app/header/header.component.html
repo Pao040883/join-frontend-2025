@@ -5,7 +5,16 @@
 
     <div class="user-container">
         <mat-icon routerLink="/help" class="material-symbols-outlined help" fontIcon="help"></mat-icon>
-        <div class="user" (click)="logout()">{{getInitials(first_name + " " + last_name)}}</div>
+        <div class="user" (click)="toggleMenu()">{{getInitials(first_name + " " + last_name)}}
+            @if(menuOpen) {
+            <div class="menu">
+                <p class="mobile-help" routerLink="/help">Help</p>
+                <p routerLink="/legal-notice">Legal notice</p>
+                <p routerLink="/privacy-policy">Privacy policy</p>
+                <p (click)="logout()">Logout</p>
+            </div>
+        }
+        </div>
     </div>
     }
 </div>
