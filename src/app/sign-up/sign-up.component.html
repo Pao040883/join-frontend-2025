@@ -17,16 +17,13 @@
                         fill="#2A3647"></path>
                 </svg>
             </div>
-            <div class="sign-up">
-                <span>Not a Join user?</span>
-                <button routerLink="/sign-up">Sign up</button>
-            </div>
         </div>
         <div class="form-container">
             <mat-card>
                 <mat-card-content class="login">
-                    <h1>Log in</h1>
+                    <h1>Sign up</h1>
                     <div class="underline"></div>
+                    <mat-icon class="material-symbols-outlined arrow" routerLink="/login">arrow_back</mat-icon>
 
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <mat-form-field appearance="outline" class="full-width">
@@ -105,10 +102,7 @@
 
                         <div class="button-group">
                             <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
-                                Log in
-                            </button>
-                            <button mat-stroked-button color="primary" type="button">
-                                Guest Log in
+                                sign Up
                             </button>
                         </div>
                     </form>

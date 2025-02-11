@@ -1,4 +1,4 @@
-import { Component, HostListener, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, HostListener, ChangeDetectorRef, inject, OnInit } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,7 @@ import { ApiService } from '../../../shared/api.service';
     ])
   ]
 })
-export class SummaryComponent {
+export class SummaryComponent implements OnInit {
   private apiService = inject(ApiService);
   dashboardData: any = {};
   showGreeting = true;
@@ -44,21 +44,26 @@ export class SummaryComponent {
   ngOnInit(): void {
     this.setGreetingMessage();
     this.loggedUser = localStorage.getItem('first_name') + " " + localStorage.getItem('last_name');
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Token ' + localStorage.getItem('token')
-    });
-
-    this.apiService.loadDashboard().subscribe({
-      next: (data) => {
-        this.dashboardData = data;
-      },
-      error: (error) => {
-        console.error('Fehler beim Abrufen des Dashboards:', error);
+  
+    // Warte, bis der Token verfügbar ist, bevor Dashboard-Daten geladen werden
+    setTimeout(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log('Token gefunden, lade Dashboard-Daten...');
+        this.apiService.loadDashboard().subscribe({
+          next: (data) => {
+            this.dashboardData = data;
+            console.log('Dashboard-Daten geladen:', data);
+          },
+          error: (error) => {
+            console.error('Fehler beim Abrufen des Dashboards:', error);
+          }
+        });
+      } else {
+        console.error('Kein Token verfügbar, Dashboard wird nicht geladen.');
       }
-    });
-
+    }, 300); // Kleine Verzögerung, um sicherzustellen, dass der Token gesetzt ist.
+  
     if (this.isMobileView) {
       setTimeout(() => {
         this.showGreeting = false;
@@ -66,11 +71,10 @@ export class SummaryComponent {
     } else {
       this.showGreeting = true;
       this.showContent = true;
-
-      // ✅ Change Detection erzwingen
       this.cdr.detectChanges();
     }
   }
+  
 
   @HostListener('window:resize')
   onResize() {
@@ -78,7 +82,7 @@ export class SummaryComponent {
     if (!this.isMobileView) {
       this.showGreeting = true;
       this.showContent = true;
-      this.cdr.detectChanges(); // ✅ Change Detection auch hier
+      this.cdr.detectChanges(); 
     }
   }
 
@@ -98,7 +102,7 @@ export class SummaryComponent {
   onGreetingAnimationDone(): void {
     if (this.isMobileView && !this.showGreeting) {
       this.showContent = true;
-      this.cdr.detectChanges(); // ✅ Nach der Animation auch hier
+      this.cdr.detectChanges(); 
     }
   }
 }

@@ -14,7 +14,7 @@
 
         .header {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             align-items: center;
             height: 122px;
             width: 100%;
@@ -45,6 +45,7 @@
                 display: flex;
                 align-items: center;
                 gap: 16px;
+
             }
         }
     }
@@ -53,6 +54,15 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        position: relative;
+
+        .arrow {
+            position: absolute;
+            left: 30px;
+            top: 40px;
+            color: #2a3647;
+            cursor: pointer;
+        }
 
         mat-card {
             flex-direction: column;

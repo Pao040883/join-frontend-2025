@@ -91,7 +91,7 @@ export class LoginComponent implements AfterViewInit, OnInit{
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.loginForm.valid) return;
   
     const { email, password } = this.loginForm.value;
@@ -125,7 +125,14 @@ export class LoginComponent implements AfterViewInit, OnInit{
           localStorage.setItem('first_name', response.first_name);
           localStorage.setItem('last_name', response.last_name);
           localStorage.setItem('phone', response.phone);
-          this.router.navigate(['/']);
+          console.log('Login erfolgreich, Token gespeichert:', response.token);
+
+        // Warte kurz, um sicherzustellen, dass die Speicherung abgeschlossen ist
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']).then(() => {
+            console.log('Navigiere zum Dashboard...');
+          });
+        }, 200);
         } else {
           console.error('Fehlende Daten in der Antwort:', response);
         }

@@ -118,9 +118,24 @@ export class ApiService {
     return this.http.post<any>(this.signUrl, data);
   }
 
+  // loadDashboard(): Observable<any> {
+  //   return this.http.get<any[]>(this.dashboardUrl, { headers: this.headers });
+  // } 
+
   loadDashboard(): Observable<any> {
-    return this.http.get<any[]>(this.dashboardUrl, { headers: this.headers });
-  } 
+    const token = localStorage.getItem('token'); 
+    if (!token) {
+      console.error('Kein Token gefunden, Dashboard-Request wird nicht gesendet.');
+      return new Observable();
+    }
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+  
+    return this.http.get<any[]>(this.dashboardUrl, { headers });
+  }
+  
 
   updateUser(user: User): Observable<User> {
     return this.http.put<User>(`${this.updateUserUrl}`, user, { headers: this.headers });
