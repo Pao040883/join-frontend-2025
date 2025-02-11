@@ -58,7 +58,11 @@
                             </mat-error>
                             }
                         </mat-form-field>
-
+                        @if(serverErrorMessage !== '') {
+                            <mat-error>
+                                Oops! Something went wrong. Please try again!
+                            </mat-error> 
+                        }
                         <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
 
                         <div class="button-group">

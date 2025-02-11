@@ -65,6 +65,8 @@ export class SignUpComponent {
 
   hidePassword = true;
   hideConfirmPassword = true;
+  serverErrorMessage = '';
+
 
   onSubmit() {
     if (!this.loginForm.valid) return;
@@ -82,7 +84,8 @@ export class SignUpComponent {
           console.error('Fehlende Daten in der Antwort:', response);
         }
       },
-      error: (error) => console.error('Fehler beim Registrieren:', error)
+      error: (error) => {this.serverErrorMessage = error.error?.error
+        console.error('Fehler beim Login:', error)  }
     });
   }
 

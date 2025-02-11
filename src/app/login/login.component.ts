@@ -62,6 +62,7 @@ export class LoginComponent implements AfterViewInit, OnInit{
 
   logoState: 'start' | 'end' = 'start';
   contentState: 'hidden' | 'visible' = 'hidden';
+  serverErrorMessage = '';
 
   skipAnimation = false;
 
@@ -109,7 +110,8 @@ export class LoginComponent implements AfterViewInit, OnInit{
           console.error('Fehlende Daten in der Antwort:', response);
         }
       },
-      error: (error) => console.error('Fehler beim Login:', error)
+      error: (error) => {this.serverErrorMessage = error
+        console.error('Fehler beim Login:', error)  }
     });
   }
 
