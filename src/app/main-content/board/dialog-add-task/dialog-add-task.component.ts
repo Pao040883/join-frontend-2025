@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,9 +8,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Contact } from '../../../../shared/api.service';
+import { ApiService, Contact } from '../../../../shared/api.service';
 import { CommonModule } from '@angular/common';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dialog-add-task',
@@ -20,9 +21,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   templateUrl: './dialog-add-task.component.html',
   styleUrl: './dialog-add-task.component.scss'
 })
-export class DialogAddTaskComponent implements OnInit{
-    private dialogRef = inject(MatDialogRef<DialogAddTaskComponent>);
-  
+export class DialogAddTaskComponent implements OnInit {
+  private apiService = inject(ApiService);
+  private dialogRef = inject(MatDialogRef<DialogAddTaskComponent>);
+
   contacts: Contact[] = []; // Alle geladenen Kontakte
   selectedContacts: number[] = []; // IDs der ausgewählten Kontakte
   subtasks: string[] = []; // Subtasks
@@ -32,21 +34,24 @@ export class DialogAddTaskComponent implements OnInit{
     title: '',
     description: '',
     due_date: '',
-    prio: 'medium', // Standardwert
+    prio: 'medium', 
     category: '',
-    contacts: [] as number[], // Explizite Typisierung als number[]
+    contacts: [] as number[],
+    type: this.data,
   };
 
-  private apiUrl = 'http://127.0.0.1:8000/api';
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: string) { }
 
   ngOnInit() {
     this.loadContacts();
   }
 
+  openSnackBar() {
+    const snackBarRef = this._snackBar.open('Task erstellt', '', { duration: 1500 });
+  }
+
   loadContacts() {
-    this.http.get<Contact[]>(`${this.apiUrl}/contacts/`).subscribe({
+    this.apiService.loadContacts().subscribe({
       next: (response) => (this.contacts = response),
       error: (error) => console.error('Fehler beim Laden der Kontakte:', error)
     });
@@ -65,22 +70,19 @@ export class DialogAddTaskComponent implements OnInit{
 
   submitTask() {
     this.task.contacts = this.selectedContacts.map(id => Number(id));
-  
+
     // Stelle sicher, dass due_date im richtigen Format ist
     if (this.task.due_date) {
       const localDate = new Date(this.task.due_date);
-      const utcDate = new Date(Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate()));  
+      const utcDate = new Date(Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate()));
       this.task.due_date = utcDate.toISOString().split('T')[0];  // YYYY-MM-DD
     }
-  
-    console.log('Gesendete Daten:', JSON.stringify(this.task));
-  
+
     // Zuerst den Task speichern
-    this.http.post(`${this.apiUrl}/tasks/`, this.task).subscribe({
+    this.apiService.createTask(this.task).subscribe({
       next: (response: any) => {
-        console.log('Task gespeichert:', response);
         const taskId = response.id; // Die ID des erstellten Tasks
-  
+
         // Subtasks erstellen, wenn welche vorhanden sind
         if (this.subtasks.length > 0) {
           const subtaskRequests = this.subtasks.map(title => {
@@ -89,29 +91,27 @@ export class DialogAddTaskComponent implements OnInit{
               status: 'open',
               task: taskId // Verknüpfung mit dem erstellten Task
             };
-            // POST-Request für jeden Subtask
-            console.log(subtask);
-            
-            return this.http.post(`${this.apiUrl}/subtasks/`, subtask);
+
+            return this.apiService.createSubTask(subtask);
           });
-  
+
           // Warten, bis alle Subtasks gespeichert wurden
           Promise.all(subtaskRequests.map(req => req.toPromise()))
             .then(results => {
-              console.log('Alle Subtasks gespeichert:', results);
             })
             .catch(error => {
               console.error('Fehler beim Speichern der Subtasks:', error);
             });
         }
         this.dialogRef.close();
+        this.openSnackBar();
       },
       error: (error) => {
         console.error('Fehler beim Speichern des Tasks:', error.error);
       }
     });
   }
-  
+
   getContactName(contactId: number): string {
     return this.contacts.find(c => c.id === contactId)?.name || 'Unbekannt';
   }
@@ -120,7 +120,7 @@ export class DialogAddTaskComponent implements OnInit{
     return this.contacts.find(c => c.id === contactId)?.color || 'Unbekannt';
   }
 
-  getInitials(name:string) {
+  getInitials(name: string) {
     return name
       .trim()                        // Entfernt führende/trailing Leerzeichen
       .split(/\s+/)                  // Teilt bei einem oder mehreren Leerzeichen

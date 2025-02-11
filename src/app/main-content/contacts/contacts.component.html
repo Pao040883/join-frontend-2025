@@ -1,6 +1,6 @@
-<div class="container">
+<!-- <div class="container">
     <div class="contact-list-container">
-        <button>
+        <button (click)="openAddContactDialog()">
             Add new contact
             <mat-icon>person_add</mat-icon>
         </button>
@@ -8,8 +8,8 @@
         @for (group of groupContactsByLastName(); track group.letter) {
         <h3>{{ group.letter }}</h3>
         @for (contact of group.contacts; track contact.name) {
-        <div class="contact-item" (click)="selectContact(contact)">
-            <div class="avatar" [ngStyle]="{'background': getContactColor(contact.id)}">{{ getInitials(contact.name) }}
+            <div class="contact-item" (click)="selectContact(contact)" [ngClass]="{'selected': contact === selectedContact}">
+                <div class="avatar" [ngStyle]="{'background': getContactColor(contact.id!)}">{{ getInitials(contact.name) }}
             </div>
             <div class="details">
                 <span>{{ contact.name }}</span>
@@ -27,22 +27,90 @@
         </div>
         @if (selectedContact) {
         <div class="contact-detail-header">
-            <div class="avatar-large" [ngStyle]="{'background': getContactColor(selectedContact.id)}">{{
+            <div class="avatar-large" [ngStyle]="{'background': getContactColor(selectedContact.id!)}">{{
                 getInitials(selectedContact.name) }}</div>
             <div class="actions">
                 <h2>{{ selectedContact.name }}</h2>
                 <div class="buttons">
-                    <button>Edit ✏️</button>
-                    <button>Delete 🗑️</button>
+                    <button (click)="openEditDialog(selectedContact.id!)">Edit ✏️</button>
+                    <button (click)="deleteContact(selectedContact.id!)">Delete 🗑️</button>
                 </div>
             </div>
         </div>
 
         <div class="informations">
             <h3>Contact Information</h3>
-            <p><strong>Email:</strong> <a [href]="'mailto:' + selectedContact.email">{{ selectedContact.email }}</a></p>
-            <p><strong>Phone:</strong> {{ selectedContact.phone || 'Not provided' }}</p>
+            <p><strong>Email:</strong></p>
+            <a [href]="'mailto:' + selectedContact.email">{{ selectedContact.email }}</a>
+            <p><strong>Phone:</strong></p>
+            <p>{{ selectedContact.phone || 'Not provided' }}</p>
         </div>
         }
     </div>
+</div> -->
+
+<div class="container">
+    @if (!isMobileView() || !showDetails()) {
+    <div class="contact-list-container">
+        <button (click)="openAddContactDialog()">
+            Add new contact
+            <mat-icon>person_add</mat-icon>
+        </button>
+
+        @for (group of groupContactsByLastName(); track group.letter) {
+        <h3>{{ group.letter }}</h3>
+        @for (contact of group.contacts; track contact.name) {
+        <div class="contact-item" (click)="selectContact(contact)"
+            [ngClass]="{'selected': contact === selectedContact}">
+            <div class="avatar" [ngStyle]="{'background': getContactColor(contact.id!)}">
+                {{ getInitials(contact.name) }}
+            </div>
+            <div class="details">
+                <span>{{ contact.name }} <span>@if(showYou(contact)){(You)}</span></span>
+                <span class="email">{{ contact.email }}</span>
+            </div>
+        </div>
+        }
+        }
+    </div>
+    }
+
+    @if (!isMobileView() || showDetails()) {
+    <div class="contact-details-container">
+        <button class="back-btn" *ngIf="isMobileView()" (click)="goBack()">← Back</button>
+        <div class="contact-header">
+            <h1>Contacts</h1>
+            <span class="subline">|</span>
+            <span>Better with a team</span>
+        </div>
+
+        @if (selectedContact) {
+        <div class="contact-detail-header">
+            <div class="avatar-large" [ngStyle]="{'background': getContactColor(selectedContact.id!)}">
+                {{ getInitials(selectedContact.name) }}
+            </div>
+            <div class="actions">
+                <h2>{{ selectedContact.name }} <span>@if(showYou(selectedContact)){(You)}</span></h2>
+                @if(canEdit(selectedContact)){
+                <div class="buttons">
+                    <button (click)="openEditDialog(selectedContact.id!)">Edit ✏️</button>
+                    <button *ngIf="!showYou(selectedContact)" (click)="deleteContact(selectedContact.id!)">Delete 🗑️</button>
+                    <p *ngIf="showYou(selectedContact)" class="info-text">You can edit your profile, but you cannot delete it.</p>
+                </div>
+                } @else {
+                <p *ngIf="!canEdit(selectedContact)" class="info-text">You do not have the permissions to edit or delete this contact.</p>
+                }
+            </div>
+        </div>
+
+        <div class="informations">
+            <h3>Contact Information</h3>
+            <p><strong>Email:</strong></p>
+            <a [href]="'mailto:' + selectedContact.email">{{ selectedContact.email }}</a>
+            <p><strong>Phone:</strong></p>
+            <p>{{ selectedContact.phone || 'Not provided' }}</p>
+        </div>
+        }
+    </div>
+    }
 </div>

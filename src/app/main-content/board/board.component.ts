@@ -13,7 +13,6 @@ import {
   CdkDragExit,
 } from '@angular/cdk/drag-drop';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { ApiService, Contact } from '../../../shared/api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditTaskComponent } from './dialog-edit-task/dialog-edit-task.component';
@@ -54,18 +53,7 @@ export class BoardComponent implements OnInit {
   originalDone: Task[] = [];
   originalFeedback: Task[] = [];
 
-  private apiUrl = 'http://127.0.0.1:8000/api/tasks/';
-  private contactsUrl = 'http://127.0.0.1:8000/api/contacts/';
-
   constructor(private http: HttpClient, public dialog: MatDialog) {}
-
-  getTask(id: number): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}${id}/`);
-  }  
-
-  getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl);
-  }
 
   ngOnInit() {
     this.loadTasks();
@@ -73,37 +61,14 @@ export class BoardComponent implements OnInit {
   }
 
   loadContacts() {
-    this.http.get<Contact[]>(`${this.contactsUrl}`).subscribe({
+    this.apiService.loadContacts().subscribe({
       next: (response) => (this.contacts = response),
       error: (error) => console.error('Fehler beim Laden der Kontakte:', error)
     });
   }
 
-  // loadTasks() {
-  //   this.getTasks().subscribe({
-  //     next: (tasks) => {
-  //       this.todo = tasks
-  //         .filter(task => task.type === 'todo')
-  //         .sort((a, b) => a.position - b.position); // Nach Position sortieren
-  
-  //       this.in_progress = tasks
-  //         .filter(task => task.type === 'progress')
-  //         .sort((a, b) => a.position - b.position);
-  
-  //       this.done = tasks
-  //         .filter(task => task.type === 'done')
-  //         .sort((a, b) => a.position - b.position);
-  
-  //       this.feedback = tasks
-  //         .filter(task => task.type === 'feedback')
-  //         .sort((a, b) => a.position - b.position);
-  //     },
-  //     error: (error) => console.error('Fehler beim Laden der Aufgaben:', error)
-  //   });
-  // }
-
   loadTasks() {
-    this.getTasks().subscribe({
+    this.apiService.loadTasks().subscribe({
       next: (tasks) => {
         this.todo = this.originalTodo = tasks.filter(task => task.type === 'todo').sort((a, b) => a.position - b.position);
         this.in_progress = this.originalInProgress = tasks.filter(task => task.type === 'progress').sort((a, b) => a.position - b.position);
@@ -177,7 +142,6 @@ export class BoardComponent implements OnInit {
       // Nur aktualisieren, wenn sich die Position geändert hat
       if (task['position'] !== updatedPosition || task.type !== type) {
         this.apiService.updateTaskPosition(task.id, updatedPosition, type).subscribe({
-          next: () => console.log(`Position von Task ${task.id} aktualisiert auf ${updatedPosition}`),
           error: (error) => console.error('Fehler beim Aktualisieren der Position:', error)
         });
       }
@@ -186,7 +150,7 @@ export class BoardComponent implements OnInit {
   
 
   openEditDialog(id: number) {
-    this.getTask(id).subscribe({
+    this.apiService.loadTask(id).subscribe({
       next: (taskData) => {
         const dialogRef = this.dialog.open(DialogEditTaskComponent, {
           data: taskData, 
@@ -202,8 +166,10 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  openAddTaskDialog(){
-    const dialogRef = this.dialog.open(DialogAddTaskComponent);
+  openAddTaskDialog(container: string){
+    const dialogRef = this.dialog.open(DialogAddTaskComponent, {
+      data: container
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       this.loadTasks();
@@ -295,7 +261,6 @@ export class BoardComponent implements OnInit {
 
   changeType(taskId: number, newType: string) {
     this.apiService.updateTaskType(taskId, newType).subscribe({
-      next: (response) => console.log('Typ erfolgreich geändert:', response),
       error: (error) => console.error('Fehler beim Ändern des Typs:', error)
     });
   }

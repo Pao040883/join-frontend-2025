@@ -23,6 +23,7 @@
         justify-content: flex-start;
         flex: 1;
         margin-top: 20vh;
+        width: 100%;
 
         ul {
             display: flex;
@@ -36,15 +37,24 @@
                 align-items: center;
                 gap: 6px;
                 cursor: pointer;
-                font-size: 16px;
                 font-weight: 400;
                 line-height: 19.2px;
+                padding: 8px 56px 8px 56px;
+
+                &:hover {
+                    background-color: #2A3D59;
+                }
+
+                mat-icon {
+                    font-size: 24px;
+                }
             }
         }
     }
 
     .informations {
         margin-bottom: 64px;
+        width: 100%;
 
         ul {
             display: flex;
@@ -58,7 +68,54 @@
                 font-size: 16px;
                 font-weight: 400;
                 line-height: 19.2px;
+                padding: 8px 56px 8px 56px;
+
+                &:hover {
+                    background-color: #2A3D59;
+                }
             }
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    .container {
+        position: fixed;
+        width: 100%;
+        height: 96px;
+        bottom: 0;
+        top: auto;
+
+        .logo {
+            display: none;
+        }
+
+        nav {
+            width: 100%;
+            height: 100%;
+            margin-top: 0;
+            justify-content: center;
+            padding: 4px;
+
+            ul {
+                flex-direction: row;
+
+                li {
+                    flex-direction: column;
+                    width: 25%;
+                    padding: 0;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 16.8px;
+                    text-align: left;
+                    padding: 4px;
+                    border-radius: 16px;
+                }
+            }
+        }
+
+        .informations {
+            display: none;
         }
     }
 }

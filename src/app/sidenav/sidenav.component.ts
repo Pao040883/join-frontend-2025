@@ -10,5 +10,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './sidenav.component.scss'
 })
 export class SidenavComponent {
-
+  loggedUser = localStorage.getItem('token');
 }

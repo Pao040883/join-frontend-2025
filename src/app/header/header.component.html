@@ -1,7 +1,11 @@
 <div class="container">
+    <img class="mobile-logo" src="/assets/img/logo-mobile-header.png" alt="">
     <h1>Kanban Project Management Tool</h1>
+    @if(loggedUser) {
+
     <div class="user-container">
         <mat-icon routerLink="/help" class="material-symbols-outlined help" fontIcon="help"></mat-icon>
-        <div class="user">PO</div>
+        <div class="user" (click)="logout()">{{getInitials(first_name + " " + last_name)}}</div>
     </div>
+    }
 </div>

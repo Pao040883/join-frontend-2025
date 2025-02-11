@@ -1,14 +1,13 @@
 <div class="container">
-    <div class="headline">
+    <div class="headline" *ngIf="showContent" @contentFade>
         <h1>Join 360</h1>
         <span class="subline"></span>
         <h2>Key Metrics at a Glance</h2>
     </div>
     <div class="content">
-        <div class="tile-container">
-            <!-- --- -->
+        <div class="tile-container" *ngIf="showContent" @contentFade>
             <div class="tiles1">
-                <div class="tile todo">
+                <div class="tile todo" routerLink="/board">
                     <div class="tile-icon">
                         <mat-icon class="material-symbols-outlined help" fontIcon="edit"></mat-icon>
                     </div>
@@ -18,7 +17,7 @@
                     </div>
                 </div>
 
-                <div class="tile done">
+                <div class="tile done" routerLink="/board">
                     <div class="tile-icon">
                         <mat-icon class="material-symbols-outlined help" fontIcon="check"></mat-icon>
                     </div>
@@ -29,9 +28,8 @@
                 </div>
             </div>
 
-            <!-- --- -->
             <div class="tiles2">
-                <div class="tile">
+                <div class="tile" routerLink="/board">
                     <div class="urgent">
                         <div class="tile-icon">
                             <mat-icon class="material-symbols-outlined help" fontIcon="double_arrow"></mat-icon>
@@ -49,23 +47,22 @@
                 </div>
             </div>
 
-        <!-- --- -->
             <div class="tiles3">
-                <div class="tile sum">
+                <div class="tile sum" routerLink="/board">
                     <div class="counts">
                         <span class="quantity">{{dashboardData.sum_tasks}}</span>
                         <span class="tile-name">Tasks in board</span>
                     </div>
                 </div>
 
-                <div class="tile progress">
+                <div class="tile progress" routerLink="/board">
                     <div class="counts">
                         <span class="quantity">{{dashboardData.sum_progress}}</span>
                         <span class="tile-name">Tasks in progress</span>
                     </div>
                 </div>
 
-                <div class="tile await">
+                <div class="tile await" routerLink="/board">
                     <div class="counts">
                         <span class="quantity">{{dashboardData.sum_feedback}}</span>
                         <span class="tile-name">Awaiting feedback</span>
@@ -74,9 +71,11 @@
             </div>
         </div>
 
-        <!-- --- -->
-        <div class="greet">
-            Good evening!
+        <div *ngIf="showGreeting" 
+        @greetFade 
+        (@greetFade.done)="onGreetingAnimationDone()" class="greet">
+        {{ greetingMessage }} <br>
+        {{loggedUser}}
         </div>
     </div>
 </div>

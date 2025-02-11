@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="subscription">
+        <img src="/assets/img/logo_nav.svg" alt="">
+        <h1>Edit task</h1>
+    </div>
+    <div class="form-container">
+        <div class="avatar-container">
+            <div class="avatar" [ngStyle]="{'background': data.color}">{{getInitials(data.name)}}</div>
+          </div>
+        
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" placeholder="name">
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="contactForm.get('name')?.hasError('required')">Name is required</mat-error>
+              <mat-error *ngIf="contactForm.get('name')?.hasError('minlength')">Name must be at least 2 characters long</mat-error>
+              <mat-error *ngIf="contactForm.get('name')?.hasError('twoWords')">Name must contain at least two words</mat-error>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" placeholder="email">
+              <mat-icon matSuffix>email</mat-icon>
+              <mat-error *ngIf="contactForm.get('email')?.hasError('required')">Email is required</mat-error>
+              <mat-error *ngIf="contactForm.get('email')?.hasError('email')">Enter a valid email</mat-error>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>Number</mat-label>
+              <input matInput formControlName="phone" placeholder="phone">
+              <mat-icon matSuffix>phone</mat-icon>
+              <mat-error *ngIf="contactForm.get('phone')?.hasError('required')">Phone number is required</mat-error>
+              <mat-error *ngIf="contactForm.get('phone')?.hasError('pattern')">Enter a valid phone number</mat-error>
+            </mat-form-field>
+        
+            <div class="button-group">
+              <button mat-stroked-button color="primary" type="button" (click)="deleteContact()">Delete</button>
+              <button mat-raised-button class="save-button" type="submit" [disabled]="contactForm.invalid">Save <mat-icon>check</mat-icon></button>
+            </div>
+          </form>
+    </div>
+</div>

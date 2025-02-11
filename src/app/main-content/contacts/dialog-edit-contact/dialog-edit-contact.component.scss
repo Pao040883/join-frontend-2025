@@ -1,0 +1,109 @@
+.container {
+    display: flex;
+
+    .subscription {
+        background-color: #2a3647;
+        height: 600px;
+        margin-right: 28px;
+        border-radius: 4px 12px 12px 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 12px;
+        width: 400px;
+        gap: 16px;
+
+        img {
+            width: 60px;
+        }
+
+        h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 60px;
+            text-align: center;
+        }
+
+        span{
+            color: white;
+            font-size: 27px;
+            font-weight: 400;
+            text-align: center;
+        }
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
+
+        .avatar-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+
+            .avatar {
+                min-width: 120px !important;
+                height: 120px !important;
+                aspect-ratio: 1 / 1;
+                border-radius: 100% !important;
+                font-weight: 500;
+                font-size: 47px;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        mat-form-field {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            button {
+                flex: 1;
+                margin: 0 5px;
+            }
+
+            .save-button {
+                background-color: #2a3647;
+                color: #fff;
+            }
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    .container {
+        flex-direction: column;
+
+        .subscription {
+            height: auto;
+            margin-right: 0;
+            border-radius: 0;
+            width: 100%;
+
+            h1 {
+                font-size: 40px;
+            }
+
+            span {
+                font-size: 18px;
+            }
+        }
+
+        .form-container {
+            flex-direction: column;
+        }
+    }
+}

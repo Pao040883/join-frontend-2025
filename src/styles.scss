@@ -48,3 +48,24 @@ $join_frontend-theme: mat.define-light-theme((
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important; /* Ändere "white" zu der gewünschten Hintergrundfarbe */
+    -webkit-text-fill-color: #000 !important; /* Ändere die Textfarbe, falls nötig */
+}
+
+:root {
+  // Standardwert für kleinere Bildschirme (z. B. wenn die Container-Padding 80px beträgt)
+  --logo-left: 80px;
+}
+
+@media (min-width: 1920px) {
+  :root {
+    // Bei größeren Bildschirmen soll der Abstand so berechnet werden,
+    // dass der Container (max-width: 1920px) zentriert ist.
+    --logo-left: calc((100vw - 1920px) / 2);
+  }
+}

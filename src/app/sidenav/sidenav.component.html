@@ -1,5 +1,6 @@
 <div class="container">
     <img class="logo" src="/assets/img/logo_nav.svg" alt="">
+    @if(loggedUser) {
     <nav>
         <ul>
             <li routerLink="/summary"><mat-icon class="material-symbols-outlined" fontIcon="space_dashboard"></mat-icon> Summary</li>
@@ -9,7 +10,7 @@
 
         </ul>
     </nav>
-
+}
     <div class="informations">
         <ul>
             <li routerLink="/privacy-policy">Privacy Policy</li>

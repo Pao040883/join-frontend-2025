@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,9 +7,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Contact } from '../../../shared/api.service';
-import { HttpClient } from '@angular/common/http';
+import { ApiService, Contact } from '../../../shared/api.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-task',
@@ -20,6 +22,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-task.component.scss'
 })
 export class AddTaskComponent implements OnInit{
+  private apiService = inject(ApiService);
   contacts: Contact[] = []; // Alle geladenen Kontakte
   selectedContacts: number[] = []; // IDs der ausgewählten Kontakte
   subtasks: string[] = []; // Subtasks
@@ -34,16 +37,26 @@ export class AddTaskComponent implements OnInit{
     contacts: [] as number[], // Explizite Typisierung als number[]
   };
 
-  private apiUrl = 'http://127.0.0.1:8000/api';
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar, private router: Router) {}
 
   ngOnInit() {
     this.loadContacts();
   }
 
+  openSnackBar() {
+    const snackBarRef = this._snackBar.open('Task erstellt', '', { duration: 1500 });
+  
+    snackBarRef.afterOpened().subscribe(() => {
+      setTimeout(() => this.router.navigate(['/board']), 500);
+    });
+  
+    snackBarRef.afterDismissed().subscribe(() => {
+    });
+  }
+  
+
   loadContacts() {
-    this.http.get<Contact[]>(`${this.apiUrl}/contacts/`).subscribe({
+    this.apiService.loadContacts().subscribe({
       next: (response) => (this.contacts = response),
       error: (error) => console.error('Fehler beim Laden der Kontakte:', error)
     });
@@ -69,13 +82,10 @@ export class AddTaskComponent implements OnInit{
       const utcDate = new Date(Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate()));  
       this.task.due_date = utcDate.toISOString().split('T')[0];  // YYYY-MM-DD
     }
-  
-    console.log('Gesendete Daten:', JSON.stringify(this.task));
-  
+   
     // Zuerst den Task speichern
-    this.http.post(`${this.apiUrl}/tasks/`, this.task).subscribe({
+    this.apiService.createTask(this.task).subscribe({
       next: (response: any) => {
-        console.log('Task gespeichert:', response);
         const taskId = response.id; // Die ID des erstellten Tasks
   
         // Subtasks erstellen, wenn welche vorhanden sind
@@ -86,21 +96,19 @@ export class AddTaskComponent implements OnInit{
               status: 'open',
               task: taskId // Verknüpfung mit dem erstellten Task
             };
-            // POST-Request für jeden Subtask
-            console.log(subtask);
-            
-            return this.http.post(`${this.apiUrl}/subtasks/`, subtask);
+
+            return this.apiService.createSubTask(subtask);
           });
   
           // Warten, bis alle Subtasks gespeichert wurden
           Promise.all(subtaskRequests.map(req => req.toPromise()))
             .then(results => {
-              console.log('Alle Subtasks gespeichert:', results);
             })
             .catch(error => {
               console.error('Fehler beim Speichern der Subtasks:', error);
             });
         }
+        this.openSnackBar();
       },
       error: (error) => {
         console.error('Fehler beim Speichern des Tasks:', error.error);
@@ -125,3 +133,4 @@ export class AddTaskComponent implements OnInit{
       .toUpperCase();
   }
 }
+
