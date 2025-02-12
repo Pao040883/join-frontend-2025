@@ -49,11 +49,9 @@ export class SummaryComponent implements OnInit {
     setTimeout(() => {
       const token = localStorage.getItem('token');
       if (token) {
-        console.log('Token gefunden, lade Dashboard-Daten...');
         this.apiService.loadDashboard().subscribe({
           next: (data) => {
             this.dashboardData = data;
-            console.log('Dashboard-Daten geladen:', data);
           },
           error: (error) => {
             console.error('Fehler beim Abrufen des Dashboards:', error);
