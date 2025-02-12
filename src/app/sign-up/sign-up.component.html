@@ -28,7 +28,7 @@
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-label>Name</mat-label>
-                            <input matInput placeholder="Email" formControlName="name" type="text" />
+                            <input matInput placeholder="Name" formControlName="name" type="text" />
                             <mat-icon class="material-symbols-outlined" matSuffix>person</mat-icon>
                             @if(loginForm.get('name')?.invalid && loginForm.get('name')?.touched){
                             <mat-error>
